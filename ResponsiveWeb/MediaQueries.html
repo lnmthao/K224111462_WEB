@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Queries Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      img {
+        width: 50%; /* Mặc định chiếm 50% chiều rộng */
+        max-width: 600px; /* Giới hạn tối đa */
+        height: auto; /* Giữ tỷ lệ */
+      }
+
+      /* Media Query: Màn hình nhỏ hơn 768px */
+      @media (max-width: 768px) {
+        img {
+          width: 80%; /* Hình ảnh chiếm 80% màn hình */
+        }
+      }
+
+      /* Media Query: Màn hình nhỏ hơn 480px */
+      @media (max-width: 480px) {
+        img {
+          width: 100%; /* Hình ảnh chiếm toàn bộ chiều rộng màn hình */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Media Queries Example</h1>
+    <img src="images/noel.jpg" alt="Responsive Image">
+  </body>
+</html>
