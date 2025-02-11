@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hiển thị sản phẩm</title>
+    <style>
+        table {
+            width: 100%;
+        }
+        th {
+            background-color: yellow;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 5px;
+            font-size: 14px;
+        }
+    </style>
+    <script type="text/javascript">
+        var sanphams = [
+            {
+                ma: "sp1",
+                ten: "Cocacola",
+                gia: 15000
+            },
+            {
+                ma: "sp2",
+                ten: "Pepsi",
+                gia: 25000
+            },
+            {
+                ma: "sp3",
+                ten: "Sting",
+                gia: 17000
+            },
+            {
+                ma: "sp4",
+                ten: "Chanh dây",
+                gia: 12000
+            },
+            {
+                ma: "sp5",
+                ten: "Pho mát",
+                gia: 18000
+            }
+        ];
+
+        // Hàm hiển thị bảng
+        function displayTable(filterText = "") {
+            var tableBody = document.getElementById("tableBody");
+            tableBody.innerHTML = ""; // Xóa nội dung cũ trong bảng
+
+            // Lọc sản phẩm dựa trên từ khóa
+            var filteredProducts = sanphams.filter(function (sanpham) {
+                return (
+                    sanpham.ma.toLowerCase().includes(filterText.toLowerCase()) ||
+                    sanpham.ten.toLowerCase().includes(filterText.toLowerCase()) ||
+                    sanpham.gia.toString().includes(filterText)
+                );
+            });
+
+             // Sắp xếp sản phẩm theo giá từ thấp đến cao
+             filteredProducts.sort(function (a, b) {
+                return a.gia - b.gia;
+            });
+
+            // Duyệt qua từng sản phẩm và thêm vào bảng
+            filteredProducts.forEach(function (sanpham) {
+                var row = `
+                    <tr>
+                        <td>${sanpham.ma}</td>
+                        <td>${sanpham.ten}</td>
+                        <td>${sanpham.gia}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Hàm xử lý sự kiện khi người dùng nhập vào ô tìm kiếm
+        function onSearchInput(event) {
+            var filterText = event.target.value;
+            displayTable(filterText);
+        }
+    </script>
+</head>
+<body onload="displayTable()">
+    <p>
+        Muốn tìm gì: <input type="text" oninput="onSearchInput(event)">
+    </p>
+    <table border=1>
+        <thead>
+            <tr>
+                <th>Mã Sản Phẩm</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Đơn Giá</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Nội dung sẽ được thêm động ở đây -->
+        </tbody>
+    </table>
+</body>
+</html>
