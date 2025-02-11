@@ -1,0 +1,110 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điểm Sinh Viên</title>
+    <style>
+        table {
+            width: 100%;
+        }
+        th {
+            background-color: yellow;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 5px;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        let sinhVienList = []; // Biến lưu dữ liệu sinh viên
+
+        // Hàm hiển thị bảng
+        function displayTable(filteredSinhVienList) {
+            const tableBody = document.getElementById("tableBody");
+            tableBody.innerHTML = ""; // Xóa nội dung cũ trong bảng
+
+            filteredSinhVienList.forEach(function (sinhVien) {
+                // Tính điểm trung bình
+                const diemTB = (
+                    sinhVien.MonHocs.reduce((sum, monHoc) => sum + monHoc.Diem, 0) / 
+                    sinhVien.MonHocs.length
+                ).toFixed(2);
+
+                // Xác định kết quả
+                const ketQua = diemTB >= 5 ? "Đậu" : "Rớt";
+
+                // Tạo hàng mới trong bảng
+                const row = `
+                    <tr>
+                        <td>${sinhVien.Ma}</td>
+                        <td>${sinhVien.Ten}</td>
+                        <td>${sinhVien.MonHocs.find(mh => mh.TenMH === "Toán").Diem}</td>
+                        <td>${sinhVien.MonHocs.find(mh => mh.TenMH === "Lý").Diem}</td>
+                        <td>${sinhVien.MonHocs.find(mh => mh.TenMH === "Hóa").Diem}</td>
+                        <td>${diemTB}</td>
+                        <td>${ketQua}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Hàm load dữ liệu từ JSON
+        function loadTable() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "databaseSinhVien.json", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    sinhVienList = JSON.parse(xhr.responseText);
+                    displayTable(sinhVienList); // Hiển thị toàn bộ dữ liệu
+                }
+            };
+            xhr.send();
+        }
+
+        // Hàm tìm kiếm
+        function searchTable() {
+            const searchValue = document.getElementById("searchInput").value.toLowerCase();
+
+            // Lọc danh sách sinh viên dựa trên mã hoặc tên
+            const filteredSinhVienList = sinhVienList.filter(sinhVien =>
+                sinhVien.Ma.toLowerCase().includes(searchValue) ||
+                sinhVien.Ten.toLowerCase().includes(searchValue)
+            );
+
+            displayTable(filteredSinhVienList); // Hiển thị dữ liệu lọc
+        }
+    </script>
+</head>
+<body onload="loadTable()">
+    <p> 
+        Muốn tìm gì: <input type="text" id="searchInput" oninput="searchTable()">
+    </p>
+    <table border=1>
+        <thead>
+            <tr>
+                <th rowspan="2">Mã Sinh Viên</th>
+                <th rowspan="2">Tên Sinh Viên</th>
+                <th colspan="3">Điểm thành phần</th>
+                <th rowspan="2">Điểm Trung Bình</th>
+                <th rowspan="2">Kết Quả</th>
+            </tr>
+            <tr>
+                <th>Toán</th>
+                <th>Lý</th>
+                <th>Hóa</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Nội dung sẽ được thêm động ở đây -->
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+
